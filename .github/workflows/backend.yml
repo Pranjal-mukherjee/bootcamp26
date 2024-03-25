@@ -45,6 +45,10 @@ jobs:
           shell: bash
           working-directory: backend
       steps:
+        - name: Checkout the code
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
         - name: Create a file to store AWS key-pair
           run: touch aws-key-pair.txt
         - name: Copy the key-pair from secrets to the file
