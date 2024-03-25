@@ -56,8 +56,12 @@ jobs:
            echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.txt
         - name: Change permession for the file
           run: chmod 400 aws-key-pair.txt
-        - name: Connect to ec2 instance
-          run: ssh -i aws-key-pair.txt ubuntu@15.206.237.21
+        - name: executing remote ssh commands using ssh key
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.AWS_KEY_PAIR }}
         - name: Checkout the code
           uses: actions/checkout@v3
           with:
