@@ -3,7 +3,7 @@ run-name: Backend deployment triggered by ${{ github.actor }}.
 on:
   push:
     branches:
-      - deployment
+      - Pranjal-mukherjee:deployment
     paths:
       - backend/**
       - .github/workflows/backend.yml
