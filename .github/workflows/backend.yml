@@ -67,10 +67,9 @@ jobs:
           with:
             fetch-depth: 0
         - name: Pull image from GHCR
-          run: |
-           docker logout ghcr.io \
-           docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io \
-           docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest
+          run: docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest
+          env:
+            GHCR_TOKEN: ${{ secrets.GHCR_PAT }}
         - name: Run Docker Container
           run: |
            docker run -p 8090:8090 -d --name bootcamp26-backend_Container \
