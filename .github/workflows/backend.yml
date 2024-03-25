@@ -42,6 +42,7 @@ jobs:
       timeout-minutes: 10
       defaults:
         run:
+          shell: bash
           working-directory: backend
       steps:
         - name: Create a file to store AWS key-pair
