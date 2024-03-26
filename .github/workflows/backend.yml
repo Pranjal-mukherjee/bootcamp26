@@ -56,7 +56,7 @@ jobs:
           run: chmod 400 aws-key-pair.pem
         - name: executing remote ssh commands using ssh key
           run: |
-           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
+           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
            docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io &&
            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest &&
            if docker inspect bootcamp26-backend_Container &> /dev/null; then
@@ -67,7 +67,8 @@ jobs:
            -e SPRING_DATASOURCE_URL=${{secrets.SPRING_DATASOURCE_URL}} \
            -e SPRING_DATASOURCE_USERNAME=${{secrets.SPRING_DATASOURCE_USERNAME}} \
            -e SPRING_DATASOURCE_PASSWORD=${{secrets.SPRING_DATASOURCE_PASSWORD}} \
-           ghcr.io/pranjal-mukherjee/bootcamp26-backend:latest '
+           ghcr.io/pranjal-mukherjee/bootcamp26-backend:latest 
+           EOF
 
         
             
