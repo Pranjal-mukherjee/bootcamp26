@@ -1,4 +1,4 @@
-name: BOOTCAMP122 - Frontend deployment 
+name: BOOTCAMP26- Frontend deployment 
 run-name: Frontend deployment update triggered by ${{ github.actor }}.
 on:
   push:
