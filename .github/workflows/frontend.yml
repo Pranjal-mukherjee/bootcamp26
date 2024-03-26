@@ -35,7 +35,7 @@ jobs:
       - name: Build application
         run: |
          npm run build
-         cp public/assets dist/
+         cp -r public/assets dist/
 
       - name: Login to GitHub Container Registry
         run: docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io 
