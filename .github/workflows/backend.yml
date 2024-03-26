@@ -63,7 +63,12 @@ jobs:
             docker stop bootcamp26-backend_Container || true
             docker rm bootcamp26-backend_Container || true
            fi &&
-           docker run -p 8090:8090 -d --name bootcamp26-backend_Container -e SPRING_DATASOURCE_URL=${{secrets.SPRING_DATASOURCE_URL}} -e SPRING_DATASOURCE_USERNAME=${{secrets.SPRING_DATASOURCE_USERNAME}} -e SPRING_DATASOURCE_PASSWORD=${{secrets.SPRING_DATASOURCE_PASSWORD}} ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest '
+           docker run -p 8090:8090 -d --name bootcamp26-backend_Container \
+           -e "SPRING_DATASOURCE_URL=jdbc:mysql://15.206.180.44:3306/book_discovery?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC" \
+           -e "SPRING_DATASOURCE_USERNAME=root" \
+           -e "SPRING_DATASOURCE_PASSWORD=Test@1234" \
+           ghcr.io/pranjal-mukherjee/bootcamp26-backend:latest
+
         
             
   
