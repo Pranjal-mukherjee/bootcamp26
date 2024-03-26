@@ -67,7 +67,7 @@ jobs:
            -e "SPRING_DATASOURCE_URL=jdbc:mysql://15.206.180.44:3306/book_discovery?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC" \
            -e "SPRING_DATASOURCE_USERNAME=root" \
            -e "SPRING_DATASOURCE_PASSWORD=Test@1234" \
-           ghcr.io/pranjal-mukherjee/bootcamp26-backend:latest
+           ghcr.io/pranjal-mukherjee/bootcamp26-backend:latest '
 
         
             
