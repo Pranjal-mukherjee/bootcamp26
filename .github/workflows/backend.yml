@@ -49,34 +49,25 @@ jobs:
           uses: actions/checkout@v3
           with:
             fetch-depth: 0
-        - name: Create a file to store AWS key-pair
-          run: touch aws-key-pair.txt
         - name: Copy the key-pair from secrets to the file
           run: |
-           echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.txt
+           echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
         - name: Change permession for the file
-          run: chmod 400 aws-key-pair.txt
+          run: chmod 400 aws-key-pair.pem
         - name: executing remote ssh commands using ssh key
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME }}
-            key: ${{ secrets.AWS_KEY_PAIR }}
-        - name: Checkout the code
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-        - name: Pull image from GHCR
-          run: docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest
-          env:
-            GHCR_TOKEN: ${{ secrets.GHCR_PAT }}
-        - name: Run Docker Container
           run: |
-           docker run -p 8090:8090 -d --name bootcamp26-backend_Container \
-           -e SPRING_DATASOURCE_URL=${{secrets.SPRING_DATASOURCE_URL}} \
-           -e SPRING_DATASOURCE_USERNAME=${{secrets.SPRING_DATASOURCE_USERNAME}} \
-           -e SPRING_DATASOURCE_PASSWORD=${{secrets.SPRING_DATASOURCE_PASSWORD}} \
-           ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest
+            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+            docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io  \
+            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest \
+            docker run -p 8090:8090 -d --name bootcamp26-backend_Container \
+            -e SPRING_DATASOURCE_URL=${{secrets.SPRING_DATASOURCE_URL}} \
+            -e SPRING_DATASOURCE_USERNAME=${{secrets.SPRING_DATASOURCE_USERNAME}} \
+            -e SPRING_DATASOURCE_PASSWORD=${{secrets.SPRING_DATASOURCE_PASSWORD}} \
+            ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest
+  
+       
+      
+           
 
 
             
