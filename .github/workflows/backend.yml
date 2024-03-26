@@ -56,9 +56,9 @@ jobs:
           run: chmod 400 aws-key-pair.pem
         - name: executing remote ssh commands using ssh key
           run: |
-            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
-            docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io  \
-            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest 
+            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ubuntu@15.206.180.44 '
+            docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io  &&
+            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest '
             
   
        
