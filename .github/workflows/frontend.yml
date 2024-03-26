@@ -67,5 +67,5 @@ jobs:
               docker stop bootcamp26-frontend_Container || true
               docker rm bootcamp26-frontend_Container || true
            fi &&
-           docker run -p 3000:80 -d --name bootcamp26-frontend_Container \
+           docker run -p 80:80 -d --name bootcamp26-frontend_Container \
               ghcr.io/pranjal-mukherjee/bootcamp26-frontend:latest"
