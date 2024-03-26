@@ -61,8 +61,7 @@ jobs:
             docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest &&
             docker stop bootcamp26-backend_Container &&
             docker rm bootcamp26-backend_Container &&
-            docker run -p 8090:8090 -d --name bootcamp26-backend_Container -e SPRING_DATASOURCE_URL=${{secrets.SPRING_DATASOURCE_URL}} -e SPRING_DATASOURCE_USERNAME=${{secrets.SPRING_DATASOURCE_USERNAME}} -e SPRING_DATASOURCE_PASSWORD=${{secrets.SPRING_DATASOURCE_PASSWORD}} 
-            ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest '
+            docker run -p 8090:8090 -d --name bootcamp26-backend_Container -e SPRING_DATASOURCE_URL=${{secrets.SPRING_DATASOURCE_URL}} -e SPRING_DATASOURCE_USERNAME=${{secrets.SPRING_DATASOURCE_USERNAME}} -e SPRING_DATASOURCE_PASSWORD=${{secrets.SPRING_DATASOURCE_PASSWORD}} ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:latest '
             
   
        
