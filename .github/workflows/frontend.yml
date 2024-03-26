@@ -33,7 +33,10 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --legacy-peer-deps
       - name: Build application
-        run: npm run build
+        run: |
+         npm run build
+         cp public/assets dist/
+
       - name: Login to GitHub Container Registry
         run: docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io 
       - name: Build Docker Image
