@@ -63,12 +63,7 @@ jobs:
           run: chmod 400 aws-key-pair.pem
         - name: executing remote ssh commands using ssh key
           run: |
-           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST_FRONTEND }} \
+           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
            "docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io &&
-           docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:latest &&
-           if docker inspect bootcamp26-frontend_Container &> /dev/null; then
-              docker stop bootcamp26-frontend_Container || true
-              docker rm bootcamp26-frontend_Container || true
-           fi &&
-           docker run -p 80:80 -d --name bootcamp26-frontend_Container \
-              ghcr.io/pranjal-mukherjee/bootcamp26-frontend:latest"
+            docker compose -f /home/ubuntu/docker-compose-frontend.yml down &&
+            docker compose -f /home/ubuntu/docker-compose-frontend.yml up -d""
