@@ -63,7 +63,7 @@ jobs:
           run: chmod 400 aws-key-pair.pem
         - name: executing remote ssh commands using ssh key
           run: |
-           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
-           "docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io &&
-            docker compose -f /home/ubuntu/docker-compose-frontend.yml down &&
-            docker compose -f /home/ubuntu/docker-compose-frontend.yml up -d""
+            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
+            docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
+            docker compose -f /home/ubuntu/docker-compose-frontend.yml down
+            docker compose -f /home/ubuntu/docker-compose-frontend.yml up -d'
