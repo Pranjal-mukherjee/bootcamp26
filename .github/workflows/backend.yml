@@ -56,7 +56,7 @@ jobs:
           run: chmod 400 aws-key-pair.pem
         - name: executing remote ssh commands using ssh key
           run: |
-            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ubuntu@3.110.148.210'
+            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ubuntu@3.110.148.210 '
             docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
             docker compose -f /home/ubuntu/docker-compose-backend.yml down
             docker compose -f /home/ubuntu/docker-compose-backend.yml up -d'
