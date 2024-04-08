@@ -40,9 +40,9 @@ jobs:
       - name: Login to GitHub Container Registry
         run: docker login --username ${{secrets.GHCR_USERNAME}} --password ${{secrets.GHCR_PAT}} ghcr.io 
       - name: Build Docker Image
-        run:  docker build . --tag ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:latest
+        run:  docker build . --tag ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}}
       - name:  Push Docker Image to GHCR
-        run: docker push ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:latest          
+        run: docker push ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}}          
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -65,6 +65,7 @@ jobs:
           run: |
             ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
             docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
-            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:latest &&
-            docker compose -f /home/ubuntu/docker-compose-frontend.yml down
+            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}} &&
+            docker compose -f /home/ubuntu/docker-compose-frontend.yml down 
+            export FRONTEND_RUN_NUMBER=${{github.run_number}}
             docker compose -f /home/ubuntu/docker-compose-frontend.yml up -d'
