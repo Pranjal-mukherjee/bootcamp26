@@ -54,16 +54,13 @@ jobs:
            echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
         - name: Change permession for the file
           run: chmod 400 aws-key-pair.pem
-        - name:  Sending Run number for tag
-          run: |
-            echo "RUN_NUMBER=${{ github.run_number }}" >> back_run_number.env
-            scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v back_run_number.env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
         - name: executing remote ssh commands using ssh key
           run: |
             ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
             docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
             docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:${{github.run_number}} &&
-            docker compose -f /home/ubuntu/docker-compose-backend.yml down
+            docker compose -f /home/ubuntu/docker-compose-backend.yml down 
+            export BACKEND_RUN_NUMBER=${{github.run_number}}
             docker compose -f /home/ubuntu/docker-compose-backend.yml up -d'
       
 
