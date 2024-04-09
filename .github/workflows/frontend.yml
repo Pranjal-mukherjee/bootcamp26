@@ -61,11 +61,12 @@ jobs:
            echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
         - name: Change permession for the file
           run: chmod 400 aws-key-pair.pem
+        - name: Sending docker compose file
+          run: scp -o StrictHostKeyChecking=no -i docker-compose.yml -v docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
         - name: executing remote ssh commands using ssh key
           run: |
             ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
             docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
             docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}} &&
-            docker compose -f /home/ubuntu/docker-compose-frontend.yml down 
             export FRONTEND_RUN_NUMBER=${{github.run_number}}
-            docker compose -f /home/ubuntu/docker-compose-frontend.yml up -d'
+            docker compose up --no-deps -d frontend '
