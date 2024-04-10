@@ -67,7 +67,7 @@ jobs:
             docker compose up --no-deps -d backend &&
             if [ -f "docker-compose.yml" ]; then
               rm docker-compose.yml
-            fi
+            fi '
       
 
         
