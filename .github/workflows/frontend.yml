@@ -1,5 +1,5 @@
 name: BOOTCAMP26- Frontend deployment 
-run-name: Frontend deployment Update Triggered by ${{ github.actor }}.
+run-name: Frontend deployment Update triggered by ${{ github.actor }}.
 on:
   push:
     branches:
