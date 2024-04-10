@@ -64,7 +64,8 @@ jobs:
             docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
             docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:${{github.run_number}} &&
             export BACKEND_RUN_NUMBER=${{github.run_number}}
-            docker compose up --no-deps -d backend'
+            docker compose up --no-deps -d backend && 
+            rm docker-compose.yml'
       
 
         
