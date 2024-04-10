@@ -55,7 +55,7 @@ jobs:
         - name: Change permession for the file and docker compose
           run: |
             chmod 400 aws-key-pair.pem &&
-            chmod 400 docker-compose.yml
+            chmod 777 docker-compose.yml
         - name: Sending the docker compose file
           run: scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
         - name: executing remote ssh commands using ssh key
