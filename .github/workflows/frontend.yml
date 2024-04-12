@@ -46,6 +46,7 @@ jobs:
       - name: Update the image tag of compose
         run:  |
           cd .. 
+          git pull origin deployment
           sed -i "s/ghcr.io\/pranjal-mukherjee\/bootcamp26-frontend:.*/ghcr.io\/pranjal-mukherjee\/bootcamp26-frontend:${{github.run_number}}/g" docker-compose.yml
           git config --local user.email ${{secrets.EMAIL}}
           git config --local user.name ${{github.actor}}
