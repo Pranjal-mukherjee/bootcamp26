@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend:
-    image: ghcr.io/pranjal-mukherjee/bootcamp26-backend:49
+    image: ghcr.io/pranjal-mukherjee/bootcamp26-backend:50
     container_name: backend_compose_container
     ports:
      - 8090:8090
