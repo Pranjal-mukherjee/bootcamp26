@@ -1,0 +1,14 @@
+version: '3'
+services:
+  backend:
+    image: ghcr.io/pranjal-mukherjee/bootcamp26-backend:${BACKEND_RUN_NUMBER}
+    container_name: backend_compose_container
+    ports:
+     - 8090:8090
+    env_file:
+      - .env
+  frontend:
+    image: ghcr.io/pranjal-mukherjee/bootcamp26-frontend:${FRONTEND_RUN_NUMBER}
+    container_name: frontend_compose_container
+    ports:
+     - 80:80
