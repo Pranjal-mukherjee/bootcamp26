@@ -67,6 +67,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
       - name: executing remote ssh commands using ssh key
         run: |
+          cd ..
           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
           docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
           docker compose up --no-deps -d frontend  &&
