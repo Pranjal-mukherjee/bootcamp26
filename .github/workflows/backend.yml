@@ -9,7 +9,7 @@ on:
       - .github/workflows/backend.yml
 
 jobs:
-    build:
+    build_and_deploy:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         defaults:
@@ -36,49 +36,35 @@ jobs:
             run:  docker build . --tag ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:${{github.run_number}}
           - name:  Push Docker Image to GHCR
             run: docker push ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:${{github.run_number}}        
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      timeout-minutes: 10
-      defaults:
-        run:
-          shell: bash
-          working-directory: backend
-      steps:
-        - name: Checkout the code
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-        - name: Copy the key-pair from secrets to the file
-          run: |
-           echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
-        - name: Change permession for the file and docker compose
-          run: |
-            chmod 400 aws-key-pair.pem &&
-            chmod 777 docker-compose.yml
-        - name: Sending the docker compose file
-          run: scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
-        - name: executing remote ssh commands using ssh key
-          run: |
-            ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
-            docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
-            docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-backend:${{github.run_number}} &&
-            export BACKEND_RUN_NUMBER=${{github.run_number}}
-            docker compose up --no-deps -d backend &&
-            if [ -f "docker-compose.yml" ]; then
-              rm docker-compose.yml
-            fi '
-      
-
-        
-            
-  
-       
-      
-           
-
-
-            
-
-            
-        
+          - name: Update the image tag of compose
+            run:  |
+              cd .. 
+              sed -i "s/ghcr.io\/pranjal-mukherjee\/bootcamp26-backend:.*/ghcr.io\/pranjal-mukherjee\/bootcamp26-backend:${{github.run_number}}/g" docker-compose.yml
+              git config --local user.email ${{secrets.EMAIL}}
+              git config --local user.name ${{github.actor}}
+              git add .
+              git commit -m "Update Backend image tag to ${{github.run_number}}"
+              git push    
+          - name: Copy the key-pair from secrets to the file
+            run: |
+              cd ..
+              echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
+          - name: Change permession for the file and docker compose
+            run: |
+              cd ..
+              chmod 400 aws-key-pair.pem
+              chmod 777 docker-compose.yml
+          - name: Sending the docker compose file
+            run: |
+              cd ..
+              scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
+          - name: executing remote ssh commands using ssh key
+            run: |
+              cd ..
+              ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
+              docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
+              docker compose up --no-deps -d backend  &&
+              if [ -f "docker-compose.yml" ]; then
+                rm docker-compose.yml
+              fi '    
+   

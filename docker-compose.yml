@@ -8,9 +8,7 @@ services:
     env_file:
       - .env
   frontend:
-    depends_on:
-      - backend
-    image: ghcr.io/pranjal-mukherjee/bootcamp26-frontend:35
+    image: ghcr.io/pranjal-mukherjee/bootcamp26-frontend:34
     container_name: frontend_compose_container
     ports:
      - 80:80
