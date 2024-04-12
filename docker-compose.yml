@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
   frontend:
-    image: ghcr.io/pranjal-mukherjee/bootcamp26-frontend:37
+    image: ghcr.io/pranjal-mukherjee/bootcamp26-frontend:38
     container_name: frontend_compose_container
     ports:
      - 80:80
