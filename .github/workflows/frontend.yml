@@ -1,5 +1,5 @@
 name: BOOTCAMP26- Frontend deployment 
-run-name: Frontend Deployment update triggered by ${{ github.actor }}.
+run-name: Frontend Deployment Update triggered by ${{ github.actor }}.
 on:
   push:
     branches:
@@ -42,37 +42,23 @@ jobs:
       - name: Build Docker Image
         run:  docker build . --tag ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}}
       - name:  Push Docker Image to GHCR
-        run: docker push ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}}  
-      - name: Update the image tag of compose
-        run:  |
-          cd .. 
-          git pull origin deployment
-          sed -i "s/ghcr.io\/pranjal-mukherjee\/bootcamp26-frontend:.*/ghcr.io\/pranjal-mukherjee\/bootcamp26-frontend:${{github.run_number}}/g" docker-compose.yml
-          git config --local user.email ${{secrets.EMAIL}}
-          git config --local user.name ${{github.actor}}
-          git add .
-          git commit -m "Update frontend image tag to ${{github.run_number}}"
-          git push    
+        run: docker push ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}}
       - name: Copy the key-pair from secrets to the file
         run: |
-          cd ..
           echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
       - name: Change permession for the file and docker compose
         run: |
-          cd ..
           chmod 400 aws-key-pair.pem
-          chmod 777 docker-compose.yml
+          chmod 777 ../docker-compose.yml
       - name: Sending the docker compose file
-        run: |
-          cd ..
-          scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
+        run: scp -o StrictHostKeyChecking=no -i aws-key-pair.pem -v ../docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
       - name: executing remote ssh commands using ssh key
         run: |
-          cd ..
           ssh -o StrictHostKeyChecking=no -i aws-key-pair.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
           docker login --username "${{ secrets.GHCR_USERNAME }}" --password "${{ secrets.GHCR_PAT }}" ghcr.io &&
+          docker pull ghcr.io/${{secrets.GHCR_USERNAME}}/bootcamp26-frontend:${{github.run_number}} &&
+          export FRONTEND_RUN_NUMBER=${{github.run_number}}
           docker compose up --no-deps -d frontend  &&
           if [ -f "docker-compose.yml" ]; then
             rm docker-compose.yml
-          fi '    
-
+          fi '
