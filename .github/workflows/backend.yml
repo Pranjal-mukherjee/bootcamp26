@@ -1,5 +1,5 @@
 name: BOOTCAMP26- Backend deployment
-run-name: Backend Deployment Triggered by ${{ github.actor }}.
+run-name: Backend Deployment triggered by ${{ github.actor }}.
 on:
   push:
     branches:
