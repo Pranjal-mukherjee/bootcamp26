@@ -54,6 +54,7 @@ jobs:
           git push    
       - name: Copy the key-pair from secrets to the file
         run: |
+          cd ..
           echo "${{ secrets.AWS_KEY_PAIR }}" > aws-key-pair.pem
       - name: Change permession for the file and docker compose
         run: |
